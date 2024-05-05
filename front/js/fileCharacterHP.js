@@ -1,13 +1,34 @@
-function fetchCaracter(){
-    let url = window.location.search;
-    let slug = new URLSearchParams(url).get('slug');
-    return fetch('https://hp-api.lainocs.fr/characters/'+slug)
-    .then((response) => response.json())
+function fetchCaracter() {
+  let url = window.location.search;
+  let slug = new URLSearchParams(url).get("slug");
+  return fetch("https://hp-api.lainocs.fr/characters/" + slug).then(
+    (response) => response.json()
+  );
 }
 
-async function displayCaracter(){
-    const data = await fetchCaracter()
-    document.querySelector('#character').innerHTML = `
+let updateData = (_house) => {
+  const data = {
+    house: _house,
+  };
+  fetch("http://192.168.43.152:3000", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
+async function displayCaracter() {
+  const data = await fetchCaracter();
+  document.querySelector("#character").innerHTML = `
         <div id="characterSolo">
             <ul>
                 <h2>${data.name}</h2>
@@ -25,6 +46,7 @@ async function displayCaracter(){
             </ul>
         </div>
         <a href="index.html">Back</a>
-    `
+    `;
+  updateData(data.house);
 }
-displayCaracter()
+displayCaracter();
