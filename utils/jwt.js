@@ -1,4 +1,4 @@
-const jsonwebtoken = require("jsonwebtoken");
+import jsonwebtoken from "jsonwebtoken";
 
 const generateToken = (user) => {
   return jsonwebtoken.sign(
@@ -13,6 +13,6 @@ const generateToken = (user) => {
   );
 };
 
-module.exports = {
+export default {
   generateToken,
 };

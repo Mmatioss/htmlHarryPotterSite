@@ -10,7 +10,7 @@ let updateData = (_house) => {
   const data = {
     house: _house,
   };
-  fetch("http://192.168.43.152:3000", {
+  fetch("http://192.168.1.10:3000", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -50,3 +50,15 @@ async function displayCaracter() {
   updateData(data.house);
 }
 displayCaracter();
+
+const btnConnection = document.getElementById("btnConnection");
+
+if (localStorage.getItem("token")) {
+  btnConnection.innerText = "Déconnexion";
+  btnConnection.href = "#";
+
+  btnConnection.addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "index.html";
+  });
+}

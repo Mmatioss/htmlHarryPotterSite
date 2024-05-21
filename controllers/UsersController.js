@@ -1,15 +1,51 @@
-const prisma = require("../config/prisma");
-const { hashPassword } = require("../utils/bcrypt");
+import myBcrypt from "../utils/bcrypt.js";
 
-class UsersController {
+export default class UsersController {
   async getMyProfile(req, res) {
     const user = req.user;
     return res.status(200).send(user);
   }
 
+  async getMyCard(req, res) {
+    const houseCard = req.query.house;
+    const user = req.user;
+    let cards = null;
+    if (houseCard === "null") {
+      cards = await global.prisma.carde.findMany({
+        where: {
+          idUser: user.id,
+        },
+      });
+    } else {
+      cards = await global.prisma.carde.findMany({
+        where: {
+          idUser: user.id,
+          house: houseCard,
+        },
+      });
+    }
+    return res.status(200).send(cards);
+  }
+
+  async openBlister(req, res) {
+    let lstCharacter = await fetch("https://hp-api.lainocs.fr/characters").then(
+      (response) => response.json()
+    );
+    let monAlea = Math.floor(Math.random() * lstCharacter.length);
+    let monTirage = lstCharacter[monAlea];
+    await global.prisma.carde.create({
+      data: {
+        carde: monTirage.slug,
+        house: monTirage.house,
+        idUser: req.user.id,
+      },
+    });
+    return res.status(200).send(monTirage);
+  }
+
   async index(req, res) {
     try {
-      const users = await prisma.user.findMany();
+      const users = await global.prisma.user.findMany();
       return res.status(200).send(users);
     } catch (error) {
       return res.status(500).send(error.message);
@@ -19,11 +55,11 @@ class UsersController {
   async store(req, res) {
     try {
       const user = req.body;
-      const users = await prisma.user.create({
+      const users = await global.prisma.user.create({
         data: {
           name: user.name,
           email: user.email,
-          password: await hashPassword(user.password),
+          password: await myBcrypt.hashPassword(user.password),
         },
       });
       return res.status(201).send(users);
@@ -35,7 +71,7 @@ class UsersController {
   async show(req, res) {
     try {
       const id = req.params.id;
-      const user = await prisma.user.findUnique({
+      const user = await global.prisma.user.findUnique({
         where: { id: Number(id) },
       });
       if (!user) {
@@ -51,7 +87,7 @@ class UsersController {
     try {
       const newName = req.body.name;
       const id = req.params.id;
-      const user = await prisma.user.update({
+      const user = await global.prisma.user.update({
         where: { id: Number(id) },
         data: { name: newName },
       });
@@ -67,19 +103,17 @@ class UsersController {
   async destroy(req, res) {
     try {
       const id = req.params.id;
-      const user = await prisma.user.delete({
+      const user = await global.prisma.user.delete({
         where: { id: Number(id) },
       });
 
       if (!user) {
         return res.status(404).send("User not found");
       }
-      const users = await prisma.user.findMany();
+      const users = await global.prisma.user.findMany();
       return res.status(200).send(users);
     } catch (error) {
       return res.status(500).send(error.message);
     }
   }
 }
-
-module.exports = new UsersController();

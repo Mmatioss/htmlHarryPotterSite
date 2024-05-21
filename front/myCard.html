@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/myCard.css" />
+  </head>
+  <body>
+    <header>
+      <img src="img/Hogwarts-Logo.png" alt="logo" id="logo" />
+      <h1>Poudlard Traiding Card</h1>
+      <nav id="navHeader">
+        <a href="index.html">Accueil</a>
+        <li>Ouvrir</li>
+        <a href="myCard.html">Collection</a>
+        <a href="connexion.html" id="btnConnection">Connexion</a>
+      </nav>
+    </header>
+    <main>
+      <section id="choixMaison">
+        <h2>Ouvrir un paquet</h2>
+        <p>
+          Vous pouvez ouvrir un paquet de carte pour obtenir des cartes
+          aléatoires.
+        </p>
+        <button id="btnOuvrir" onclick="openBlister()">Ouvrir</button>
+      </section>
+      <section id="choixMaison">
+        <h2>Choix de la maison</h2>
+        <p>Choisissez votre maison pour voir les cartes de votre maison.</p>
+        <div id="conteneurMaison">
+          <button class="maison" id="Toutes" onclick="fetchCard('null')">
+            Toutes
+          </button>
+          <button
+            class="maison"
+            id="gryffondor"
+            onclick="fetchCard('Gryffindor')"
+          >
+            Gryffondor
+          </button>
+          <button
+            class="maison"
+            id="serpentard"
+            onclick="fetchCard('Slytherin')"
+          >
+            Serpentard
+          </button>
+          <button
+            class="maison"
+            id="serdaigle"
+            onclick="fetchCard('Ravenclaw')"
+          >
+            Serdaigle
+          </button>
+          <button
+            class="maison"
+            id="poufsouffle"
+            onclick="fetchCard('Hufflepuff')"
+          >
+            Poufsouffle
+          </button>
+        </div>
+      </section>
+    </main>
+    <div id="conteneurCarte"></div>
+    <!-- this section will be fill with the character informations-->
+    <script src="js/main.js"></script>
+    <script src="js/myCard.js"></script>
+  </body>
+</html>

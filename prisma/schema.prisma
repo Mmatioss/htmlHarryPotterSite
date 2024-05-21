@@ -34,3 +34,10 @@ model rasbery{
   id Int @id @default(autoincrement())
   LastHouse String
 }
+
+model Carde{
+  id Int @id @default(autoincrement())
+  idUser Int
+  carde String
+  house String
+}

@@ -1,7 +1,6 @@
-const prisma = require("../config/prisma");
-const jsonwebtoken = require("jsonwebtoken");
+import jsonwebtoken from "jsonwebtoken";
 
-class AuthMiddleware {
+export default class AuthMiddleware {
   async authenticate(req, res, next) {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
@@ -13,11 +12,11 @@ class AuthMiddleware {
     jsonwebtoken.verify(token, process.env.JWT_SECRET, async (err, payload) => {
       console.log(err);
 
-      if (err) return res.sendStatus(403);
+      if (err) return res.sendStatus(405);
 
       const email = payload.email;
 
-      const user = await prisma.user.findUnique({
+      const user = await global.prisma.user.findUnique({
         where: {
           email,
         },
@@ -31,5 +30,3 @@ class AuthMiddleware {
     });
   }
 }
-
-module.exports = new AuthMiddleware();

@@ -1,11 +1,8 @@
-const prisma = require("../config/prisma");
-const { show } = require("./UsersController");
-
-class PostController {
+export default class PostController {
   async showPosts(req, res) {
     try {
       const id = req.params.id;
-      const posts = await prisma.post.findMany({
+      const posts = await global.prisma.post.findMany({
         where: { authorId: Number(id) },
       });
       return res.status(200).send(posts);
@@ -18,14 +15,14 @@ class PostController {
     try {
       const post = req.body;
       const id = req.params.id;
-      const postPosted = await prisma.post.create({
+      const postPosted = await global.prisma.post.create({
         data: {
           title: post.title,
           content: post.content,
           authorId: Number(id),
         },
       });
-      const userPosts = await prisma.post.findMany({
+      const userPosts = await global.prisma.post.findMany({
         where: { authorId: Number(id) },
       });
       return res.status(201).send(userPosts);
@@ -34,5 +31,3 @@ class PostController {
     }
   }
 }
-
-module.exports = new PostController();

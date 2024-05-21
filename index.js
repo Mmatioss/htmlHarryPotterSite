@@ -1,11 +1,16 @@
 // import ip from "ip";
-const ip = require("ip");
-const ipAddr = ip.address();
-const bodyParser = require("body-parser");
+import ip from "ip";
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import rooter from "./router/root.js";
 
-const rooter = require("./router/root");
-const express = require("express");
-const cors = require("cors");
+import { PrismaClient } from "@prisma/client";
+
+global.prisma = new PrismaClient();
+
+const ipAddr = ip.address();
+
 const app = express();
 const port = 3000;
 
